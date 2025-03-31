@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
@@ -19,7 +20,6 @@ public class EnemyAI : MonoBehaviour
     private Animator animator;
     [SerializeField] private string jumpTriggerName = "Jump";
     [SerializeField] private string attackTriggerName = "Attack";
-
 
     [SerializeField] private Vector2 attackBoxSize = new Vector2(1.5f, 2f);
     [SerializeField] private Vector2 attackBoxOffset = new Vector2(0f, 0f);
@@ -43,7 +43,6 @@ public class EnemyAI : MonoBehaviour
         player = GameObject.FindWithTag("Player").transform;
         animator = GetComponent<Animator>();
 
-        // Apply speed variance once on spawn
         actualSpeed = speed + Random.Range(-speedVariance, speedVariance);
 
         if (enemyType == EnemyType.SLIME)
@@ -151,12 +150,14 @@ public class EnemyAI : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        // Attack box
-        Gizmos.color = Color.red;
-        Vector2 boxCenter = (Vector2)transform.position + attackBoxOffset;
-        Gizmos.DrawWireCube(boxCenter, attackBoxSize);
+        if (enemyType == EnemyType.SKELETON)
+        {
+            // Attack box
+            Gizmos.color = Color.red;
+            Vector2 boxCenter = (Vector2)transform.position + attackBoxOffset;
+            Gizmos.DrawWireCube(boxCenter, attackBoxSize);
+        } 
     }
-
 
 
 
@@ -180,7 +181,7 @@ public class EnemyAI : MonoBehaviour
         StartCoroutine(ResumeMovementAfterDelay(0.1f));
     }
 
-    private System.Collections.IEnumerator ResumeMovementAfterDelay(float delay)
+    System.Collections.IEnumerator ResumeMovementAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         isMovementPaused = false;

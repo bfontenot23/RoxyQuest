@@ -37,13 +37,11 @@ public class StaffFollowFlip : MonoBehaviour
     {
         if (player == null || playerRenderer == null) return;
 
-        // Position Lerp
         Vector3 currentLocalPos = transform.localPosition;
         float targetX = playerRenderer.flipX ? offsetLeft.x : offsetRight.x;
         Vector3 targetLocalPos = new Vector3(targetX, currentLocalPos.y, currentLocalPos.z);
         transform.localPosition = Vector3.Lerp(currentLocalPos, targetLocalPos, Time.deltaTime * positionLerpSpeed);
 
-        // Rotation Toward Mouse
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 direction = mouseWorldPos - transform.position;
         direction.z = 0f;
@@ -58,12 +56,10 @@ public class StaffFollowFlip : MonoBehaviour
         float currentAngle = GetAngleToMouse();
         float angleDelta = Mathf.DeltaAngle(lastAngle, currentAngle);
 
-        // Update total rotation (for partial revolution tracking)
         accumulatedAngle += angleDelta;
 
         lastAngle = currentAngle;
 
-        // Count full revolutions using sign crossing
         if(Input.GetMouseButton(0))
         {
             if (Mathf.Abs(accumulatedAngle) >= 360f)
@@ -80,7 +76,7 @@ public class StaffFollowFlip : MonoBehaviour
             }
         }
 
-        // Inactivity logic - only starts counting down if no full revolutions are made
+        // Inactivity
         if (inactivityTimer > 0f)
         {
             inactivityTimer -= Time.deltaTime;
