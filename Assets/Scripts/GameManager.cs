@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 
     public static bool IsChargeShotActive = false;
     public static int CurrentRevolutions = 0;
+    public static int playerHealth = 5;
 
     private void Awake()
     {

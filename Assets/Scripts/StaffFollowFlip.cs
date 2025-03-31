@@ -55,7 +55,6 @@ public class StaffFollowFlip : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationLerpSpeed);
         }
 
-        // --- Charge Shot Logic ---
         float currentAngle = GetAngleToMouse();
         float angleDelta = Mathf.DeltaAngle(lastAngle, currentAngle);
 
@@ -65,17 +64,20 @@ public class StaffFollowFlip : MonoBehaviour
         lastAngle = currentAngle;
 
         // Count full revolutions using sign crossing
-        if (Mathf.Abs(accumulatedAngle) >= 360f)
+        if(Input.GetMouseButton(0))
         {
-            accumulatedAngle = 0f;
-            GameManager.CurrentRevolutions++; // <-- Add a new int in GameManager to track this
-            inactivityTimer = inactivityDuration; // Reset timer only on full circle
-        }
+            if (Mathf.Abs(accumulatedAngle) >= 360f)
+            {
+                accumulatedAngle = 0f;
+                GameManager.CurrentRevolutions++;
+                inactivityTimer = inactivityDuration;
+            }
 
-        // Charge shot when revolutions hit threshold
-        if (GameManager.CurrentRevolutions >= revolutionThreshold)
-        {
-            GameManager.IsChargeShotActive = true;
+            // Charge shot when revolutions hit threshold
+            if (GameManager.CurrentRevolutions >= revolutionThreshold)
+            {
+                GameManager.IsChargeShotActive = true;
+            }
         }
 
         // Inactivity logic - only starts counting down if no full revolutions are made
